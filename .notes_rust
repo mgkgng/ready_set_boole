@@ -1,0 +1,7 @@
+Macros : a way to define reusuable code patterns and abstractions that operate on the code before it is compiled. They allow for metaprogramming, enabling you to generate code dynamically based on specific patterns or rules.
+Macros vs Functions
+1. Expansion at Compile-time: Macros are expanded at compile-time, whereas functions are evaluated at runtime. Macros manipulate the source code before it is compiled, enabling code generation and transformation. Functions, on the other hand, execute during runtime when they are called.
+2. Code Generation: Macros can generate arbitrary code. They allow for code generation based on patterns or rules, which is not possible with functions alone.
+3. Hygiene: Macros have built-in hygiene rules that prevent unintended variable name clasghes and ensure generated code does not interfere with existing code. 
+4. Syntax Extensions: Macros can introduce new syntax into the language. They can define domain-specific languages (DSLs) or simplify complex syntax pattern.
+etc.
