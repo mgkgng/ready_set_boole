@@ -6,7 +6,7 @@ fn logical_equivalence(a: u32, b: u32) -> u32 {
     return !a | b;
 }
 
-fn eval_formula(formula: &str) -> bool {
+pub fn eval_formula(formula: &str) -> bool {
     let mut stack = Vec::new();
 
     for c in formula.chars() {
@@ -17,6 +17,7 @@ fn eval_formula(formula: &str) -> bool {
                 let res = match c {
                     '&' => lhs & rhs,
                     '|' => lhs | rhs,
+                    '^' => lhs ^ rhs,
                     '>' => material_condition(lhs, rhs),
                     '=' => logical_equivalence(lhs, rhs),
                     _ => unreachable!()

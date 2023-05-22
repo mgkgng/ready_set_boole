@@ -8,3 +8,7 @@ etc.
 
 --------------------------------------------------------------------
 
+&str vs String
+&str and String are two types used to represent strings, but they have different ownerships and borrowing semantics.
+&str (String Slice): '&str' is an immutable reference to a string slice, which is a sequence of UTF-8 encoded bytes. It is a borrowed type and does not own the underlying memory. String slices are used to reference string data without taking ownership and are commonly used as function parameters or return types to avoid unnecessary copying.
+String: 'String' is a growable, mutalbe and owned string type. It represents an allocated string on the heap and has ownership of the underlying memory. 'String' allows you to modify and manipulate the string content dynamically.
