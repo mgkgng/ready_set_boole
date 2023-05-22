@@ -26,3 +26,10 @@ True---------------True---------------True
 True---------------False--------------False
 False--------------True---------------False
 False--------------False--------------True
+
+-------------------------------------------------------------
+
+Negation Normal Form (NNF)
+NNF is a way of representing a logical formula where negation is only applied to the variables and not to more complex expressions. This means all negations in the formula are pushed inwards (or "skolemized") until they only apply to the individual varaibles, using logical equivalences.
+The concept behind NNF is used often in the fields of logic, mathematics and computer science, espcially in Boolean algebra and propositional logic.
+In NNF, a formula is in normal form if the negation operator NOT is only applied to variables and not to more complex subformulas. The other operators allowed in NNF are AND and OR. This means that the operators implication and equivalence are not present, and quantifiers are not used.

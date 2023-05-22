@@ -1,11 +1,10 @@
-// mod eval_formula;
-// use eval_formula::eval_formula;
+mod eval_formula;
+use eval_formula::eval_formula;
 use std::collections::HashSet;
-use std::collections::HashMap;
 
 fn print_truth_table(formula: &str) {
     let mut vars_set = HashSet::new();
-    let ops = "!&|>=";
+    let ops = "!&|^>=";
 
     for c in formula.chars() {
         if c.is_uppercase() {
@@ -20,15 +19,19 @@ fn print_truth_table(formula: &str) {
 
     let vars_len = vars.len() as u32;
     let n_iter = 2_u32.pow(vars_len);
-    // let mut expression = Vec::new();
+
+    for var in &vars { print!("| {} ", var); }
+    println!("| = |");
+    for _ in 0..vars_len { print!("|---"); }
+    println!("|---|");
     for i in 0..n_iter {
-        let mut val_pair: HashMap<char, char> = HashMap::new();
         let mut new_form = formula.to_string();
         for (j, var) in vars.iter().enumerate() {
             let val = ((i / 2_u32.pow(vars_len - 1 - (j as u32))) % 2).to_string();
             new_form = new_form.replace(&var.to_string(), &val);
+            print!("| {} ", val);
         }
-        println!("{}th iter: {}", i, new_form);
+        println!("| {} |", eval_formula(&new_form) as u32);
     }
 }
 
