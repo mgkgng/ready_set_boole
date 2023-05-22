@@ -8,7 +8,7 @@ fn full_adder(a: u32, b: u32, c: u32) -> (u32, u32) {
     return (sum2, carry1 | carry2);
 }
 
-fn adder(a: u32, b: u32) -> u32 {
+pub fn adder(a: u32, b: u32) -> u32 {
     let mut res: u32 = 0;
     let mut carry: u32 = 0;
     for n in 0..32 {
@@ -19,9 +19,9 @@ fn adder(a: u32, b: u32) -> u32 {
     res
 }
 
-fn main() {
-    let a = 9999;
-    let b = 2352399;
-    let res = adder(a, b);
-    println!("Compare: {} / {}", res, a+b);
-}
+// fn main() {
+//     let a = 9999;
+//     let b = 2352399;
+//     let res = adder(a, b);
+//     println!("Compare: {} / {}", res, a + b);
+// }
