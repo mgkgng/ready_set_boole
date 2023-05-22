@@ -1,0 +1,28 @@
+Gray Code
+A Gray code is an ordering of the binary numeral system such that two successive values differ in only one bit (binary digit). This is a property known as the 'unit distance property' or 'Hamming distance of 1'. This is important in many applications, including error correction / detection schemes and analog to digital or digital to analog converters, where you don't want more than one bit to change at a time, as that could lead to erroneous states
+The name 'Gray Code' is attributed to Frank Gray who patented the use of the term 'reflected binary code' for such a system in 1953.
+The algorithm to convert binary to Gray code is quite simple:
+1. The most significant bit of the Gray code is the same as the msot significant bit of the binary input.
+2. The remaining bits of the gray code can be obtained by taking the XOR of the corresponding binary number of the bit and the binary number of the next higher bit.
+
+-------------------------------------------------------------
+
+Material Condition
+In logic, the material condition, also known as logical implication, is a logical connective that is interpreted as an "if ... then ..." statement.
+
+Antecendent(P)--------Consequence(Q)---------Material Condition(P->Q)
+True------------------True-------------------True
+True------------------False------------------False
+False-----------------True-------------------True
+False-----------------False------------------True
+
+Note that the material condition is only false if the antecedent is true and the consequent is false. This might seem strange at first (particularly in the case where both are false), but it's a convention that's useful in many areas of mathematics and logic.
+
+Logical equivalence
+Logical equivalence, on the other hand, is a different kind of relation between statements. Two statements are logically equivalent if they have the same truth value in every situation.
+
+P------------------Q------------------P<->Q
+True---------------True---------------True
+True---------------False--------------False
+False--------------True---------------False
+False--------------False--------------True

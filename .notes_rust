@@ -5,3 +5,6 @@ Macros vs Functions
 3. Hygiene: Macros have built-in hygiene rules that prevent unintended variable name clasghes and ensure generated code does not interfere with existing code. 
 4. Syntax Extensions: Macros can introduce new syntax into the language. They can define domain-specific languages (DSLs) or simplify complex syntax pattern.
 etc.
+
+--------------------------------------------------------------------
+
