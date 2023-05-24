@@ -1,36 +1,72 @@
 #[derive(Clone)]
-struct BinaryNode {
+pub struct BinaryNode {
     value: String,
     left: Option<Box<Node>>,
     right: Option<Box<Node>>
 }
 
+impl BinaryNode {
+    pub fn value(&self) -> &String {
+        &self.value
+    }
+
+    pub fn set_value(&mut self, value: String) {
+        self.value = value;
+    }
+
+    pub fn left(&self) -> &Option<Box<Node>> {
+        &self.left
+    }
+
+    pub fn set_left(&mut self, left: Option<Box<Node>>) {
+        self.left = left;
+    }
+
+    pub fn right(&self) -> &Option<Box<Node>> {
+        &self.right
+    }
+
+    pub fn set_right(&mut self, right: Option<Box<Node>>) {
+        self.right = right;
+    }
+}
+
 #[derive(Clone)]
-struct UnaryNode {
+pub struct UnaryNode {
     value: String,
     child: Option<Box<Node>>
 }
 
+impl UnaryNode {
+    pub fn value(&self) -> &String {
+        &self.value
+    }
+
+    pub fn child(&self) -> &Option<Box<Node>> {
+        &self.child
+    }
+}
+
 #[derive(Clone)]
-struct LeafNode {
+pub struct LeafNode {
     value: String
 }
 
 #[derive(Clone)]
-enum Node {
+pub enum Node {
     Binary(BinaryNode),
     Unary(UnaryNode),
     Leaf(LeafNode)
 }
 
-fn get_not_node(node: &Node) -> Node {
+pub fn get_not_node(node: &Node) -> Node {
     return Node::Unary(UnaryNode {
         value: "!".to_string(),
         child: Some(Box::new(node.clone()))
     });
 }
 
-fn get_and_node(lhs: &Node, rhs: &Node) -> Node {
+pub fn get_and_node(lhs: &Node, rhs: &Node) -> Node {
     return Node::Binary(BinaryNode {
         value: "&".to_string(),
         left: Some(Box::new(lhs.clone())),
@@ -38,7 +74,7 @@ fn get_and_node(lhs: &Node, rhs: &Node) -> Node {
     });
 }
 
-fn get_or_node(lhs: &Node, rhs: &Node) -> Node {
+pub fn get_or_node(lhs: &Node, rhs: &Node) -> Node {
     return Node::Binary(BinaryNode {
         value: "|".to_string(),
         left: Some(Box::new(lhs.clone())),
@@ -46,7 +82,7 @@ fn get_or_node(lhs: &Node, rhs: &Node) -> Node {
     });
 }
 
-fn str_to_ast(formula: &str) -> Node {
+pub fn str_to_ast(formula: &str) -> Node {
     let mut stack = Vec::new();
 
     for c in formula.chars() {
@@ -102,7 +138,7 @@ fn str_to_ast(formula: &str) -> Node {
     return root;
 }
 
-fn apply_nnf(curr: Node) -> Node {
+pub fn apply_nnf(curr: Node) -> Node {
     match curr {
         Node::Leaf(leaf) => {
             Node::Leaf(leaf)
@@ -156,7 +192,7 @@ fn apply_nnf(curr: Node) -> Node {
     }
 }
 
-fn ast_to_str(curr: Node) -> String {
+pub fn ast_to_str(curr: Node) -> String {
     let mut res: String = "".to_string();
     match curr {
         Node::Leaf(leaf) => {
@@ -175,6 +211,7 @@ fn ast_to_str(curr: Node) -> String {
     return res;
 }
 
+#[allow(dead_code)]
 fn negation_normal_form(formula: &str) -> String {
     let ast = str_to_ast(formula);
     let ast_nnf = apply_nnf(ast);
@@ -182,11 +219,11 @@ fn negation_normal_form(formula: &str) -> String {
     return res.chars().rev().collect::<String>();
 }
 
-fn main() {
-    println!("{}", negation_normal_form("A!!")); // A
-    println!("{}", negation_normal_form("AB&!")); // A!B!|
-    println!("{}", negation_normal_form("AB|!")); // A!B!&
-    println!("{}", negation_normal_form("AB>")); // A!B|
-    println!("{}", negation_normal_form("AB=")); // AB&A!B!&|
-    println!("{}", negation_normal_form("AB|C&!")); // A!B!&C!|
-}
+// fn main() {
+//     println!("{}", negation_normal_form("A!!")); // A
+//     println!("{}", negation_normal_form("AB&!")); // A!B!|
+//     println!("{}", negation_normal_form("AB|!")); // A!B!&
+//     println!("{}", negation_normal_form("AB>")); // A!B|
+//     println!("{}", negation_normal_form("AB=")); // AB&A!B!&|
+//     println!("{}", negation_normal_form("AB|C&!")); // A!B!&C!|
+// }
