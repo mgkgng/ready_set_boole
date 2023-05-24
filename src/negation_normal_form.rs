@@ -120,12 +120,19 @@ fn apply_nnf(curr: Node) -> Node {
             let child = unary.child.expect("Invalid syntax");
             match *child {
                 Node::Binary(binary) => {
-                    let lhs = apply_nnf(*binary.left.expect("Invalid syntax"));
-                    let rhs = apply_nnf(*binary.right.expect("Invalid syntax"));
+                    let left = binary.left.expect("Invalid syntax");
+                    let right = binary.right.expect("Invalid syntax");
+                    let left_nnf = apply_nnf(*left);
+                    let right_nnf = apply_nnf(*right);
+        
+                    // let left = binary.left.map(|box_node| apply_nnf(*box_node));
+                    // let right = binary.right.map(|box_node| apply_nnf(*box_node));
+                    // let lhs = apply_nnf(*binary.left.expect("Invalid syntax"));
+                    // let rhs = apply_nnf(*binary.right.expect("Invalid syntax"));
                     if binary.value == "&" {
-                        return get_or_node(&get_not_node(&lhs), &get_not_node(&rhs));
+                        return get_or_node(&get_not_node(&left_nnf), &get_not_node(&right_nnf));
                     } else if binary.value == "|" {
-                        return get_and_node(&get_not_node(&lhs), &get_not_node(&rhs));
+                        return get_and_node(&get_not_node(&left_nnf), &get_not_node(&right_nnf));
                     } else {
                         unreachable!();
                     }
@@ -168,6 +175,7 @@ fn negation_normal_form(formula: &str) -> String {
 }
 
 fn main() {
+    println!("{}", negation_normal_form("A!!")); // A
     println!("{}", negation_normal_form("AB&!")); // A!B!|
     println!("{}", negation_normal_form("AB|!")); // A!B!&
     println!("{}", negation_normal_form("AB>")); // A!B|
