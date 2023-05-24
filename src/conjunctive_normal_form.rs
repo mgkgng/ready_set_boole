@@ -212,7 +212,6 @@ pub fn get_or_node(lhs: &Node, rhs: &Node) -> Node {
     });
 }
 
-
 fn get_conjunctive_distribution(node: &Node) -> Node {
     match node {
         Node::Binary(binary) if binary.value() == "|" => {

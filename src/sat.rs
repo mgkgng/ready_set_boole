@@ -19,26 +19,27 @@ fn get_vars(formula: &str) -> Vec<char> {
     return vars;
 }
 
-fn print_truth_table(formula: &str) {
+fn sat(formula: &str) -> bool {
     let vars = get_vars(formula);
     let vars_len = vars.len() as u32;
     let n_iter = 2_u32.pow(vars_len);
 
-    for var in &vars { print!("| {} ", var); }
-    println!("| = |");
-    for _ in 0..vars_len { print!("|---"); }
-    println!("|---|");
     for i in 0..n_iter {
         let mut new_form = formula.to_string();
         for (j, var) in vars.iter().enumerate() {
             let val = ((i / 2_u32.pow(vars_len - 1 - (j as u32))) % 2).to_string();
             new_form = new_form.replace(&var.to_string(), &val);
-            print!("| {} ", val);
         }
-        println!("| {} |", eval_formula(&new_form) as u32);
+        if eval_formula(&new_form) == true {
+            return true;
+        }
     }
+    return false;
 }
 
 fn main() {
-    print_truth_table("AB&C|");
+    println!("{}", sat("AB|")); // true
+    println!("{}", sat("AB&")); // true
+    println!("{}", sat("AA!&")); // false
+    println!("{}", sat("AA^")); // false
 }
