@@ -108,12 +108,16 @@ fn apply_nnf(curr: Node) -> Node {
             Node::Leaf(leaf)
         },
         Node::Binary(binary) => {
-            let left = binary.left.map(|box_node| apply_nnf(*box_node));
-            let right = binary.right.map(|box_node| apply_nnf(*box_node));
+            let left = binary.left.expect("Invalid syntax");
+            let right = binary.right.expect("Invalid syntax");
+            let left_nnf = apply_nnf(*left);
+            let right_nnf = apply_nnf(*right);
+            // let left = binary.left.map(|box_node| apply_nnf(*box_node));
+            // let right = binary.right.map(|box_node| apply_nnf(*box_node));
             Node::Binary(BinaryNode {
                 value: binary.value,
-                left: left.map(Box::new),
-                right: right.map(Box::new),
+                left: Some(Box::new(left_nnf)),
+                right: Some(Box::new(right_nnf))
             })
         },
         Node::Unary(unary) => {
@@ -125,14 +129,18 @@ fn apply_nnf(curr: Node) -> Node {
                     let left_nnf = apply_nnf(*left);
                     let right_nnf = apply_nnf(*right);
         
-                    // let left = binary.left.map(|box_node| apply_nnf(*box_node));
-                    // let right = binary.right.map(|box_node| apply_nnf(*box_node));
-                    // let lhs = apply_nnf(*binary.left.expect("Invalid syntax"));
-                    // let rhs = apply_nnf(*binary.right.expect("Invalid syntax"));
                     if binary.value == "&" {
-                        return get_or_node(&get_not_node(&left_nnf), &get_not_node(&right_nnf));
+                        let left_nnf_not = get_not_node(&left_nnf);
+                        let right_nnf_not = get_not_node(&right_nnf);
+                        let left_nnf_not_nnf = apply_nnf(left_nnf_not);
+                        let right_nnf_not_nnf = apply_nnf(right_nnf_not);
+                        return get_or_node(&left_nnf_not_nnf, &right_nnf_not_nnf);
                     } else if binary.value == "|" {
-                        return get_and_node(&get_not_node(&left_nnf), &get_not_node(&right_nnf));
+                        let left_nnf_not = get_not_node(&left_nnf);
+                        let right_nnf_not = get_not_node(&right_nnf);
+                        let left_nnf_not_nnf = apply_nnf(left_nnf_not);
+                        let right_nnf_not_nnf = apply_nnf(right_nnf_not);
+                        return get_and_node(&left_nnf_not_nnf, &right_nnf_not_nnf);
                     } else {
                         unreachable!();
                     }
@@ -160,18 +168,18 @@ fn ast_to_str(curr: Node) -> String {
             res += &ast_to_str(*binary.left.expect("Invalid syntax"));
         },
         Node::Unary(unary) => {
-            res += &ast_to_str(*unary.child.expect("Invalid syntax"));
             res += &unary.value;
+            res += &ast_to_str(*unary.child.expect("Invalid syntax"));
         }
     }
-    return res.chars().rev().collect::<String>();
+    return res;
 }
 
 fn negation_normal_form(formula: &str) -> String {
     let ast = str_to_ast(formula);
     let ast_nnf = apply_nnf(ast);
     let res = ast_to_str(ast_nnf);
-    return res;
+    return res.chars().rev().collect::<String>();
 }
 
 fn main() {
