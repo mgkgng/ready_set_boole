@@ -12,3 +12,14 @@ etc.
 &str and String are two types used to represent strings, but they have different ownerships and borrowing semantics.
 &str (String Slice): '&str' is an immutable reference to a string slice, which is a sequence of UTF-8 encoded bytes. It is a borrowed type and does not own the underlying memory. String slices are used to reference string data without taking ownership and are commonly used as function parameters or return types to avoid unnecessary copying.
 String: 'String' is a growable, mutalbe and owned string type. It represents an allocated string on the heap and has ownership of the underlying memory. 'String' allows you to modify and manipulate the string content dynamically.
+
+--------------------------------------------------------------------
+
+Some and Option
+Some and Option are part of the Rust standard library and are used for handling nullable or optional values. They provide a way to represent the presence or absence of a value in a type-safe manner.
+
+Option: Option is an enum type with two variants: 'Some(T)' and 'None'. It is commonly used to indicate whether a value is present ('Some') or absent ('None').
+Some: Some(T) is a variant of the Option enum that represents the presence of a value. It wraps the vlaue of type 'T' and indicates that the value is not null or absent.
+None: None is the other varaint of the Option enum that represents the absence of a value. It indicates that there is no value to associate with an operation or result. 'None' is often used to handle cases where a value maybe missing or when a computation fails to produce a valid result.
+
+Option is used to avoid null pointer exceptions or undefined behavior that can occur when dealing with null values directly.
