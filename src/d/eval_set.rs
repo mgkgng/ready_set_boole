@@ -81,25 +81,25 @@ fn eval_set(formula: &str, sets: &Vec<Vec<i32>>) -> Vec<i32> {
     res
 }
 
-fn main() {
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![0, 3, 4],
-    ];
-    let result = eval_set("AB&", &sets); // [0]
-    println!("{:?}", result);
+// fn main() {
+//     let sets = vec![
+//         vec![0, 1, 2],
+//         vec![0, 3, 4],
+//     ];
+//     let result = eval_set("AB&", &sets); // [0]
+//     println!("{:?}", result);
 
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![3, 4, 5],
-    ];
-    let result = eval_set("AB|", &sets); // [0, 1, 2, 3, 4, 5]
-    println!("{:?}", result);
+//     let sets = vec![
+//         vec![0, 1, 2],
+//         vec![3, 4, 5],
+//     ];
+//     let result = eval_set("AB|", &sets); // [0, 1, 2, 3, 4, 5]
+//     println!("{:?}", result);
 
-    let sets = vec![
-        vec![0, 1, 2],
-    ];
-    let result = eval_set("A!", &sets); // []
-    println!("{:?}", result);
+//     let sets = vec![
+//         vec![0, 1, 2],
+//     ];
+//     let result = eval_set("A!", &sets); // []
+//     println!("{:?}", result);
 
-}
+// }

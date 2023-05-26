@@ -39,6 +39,6 @@ fn print_truth_table(formula: &str) {
     }
 }
 
-fn main() {
-    print_truth_table("AB&C|");
-}
+// fn main() {
+//     print_truth_table("AB&C|");
+// }

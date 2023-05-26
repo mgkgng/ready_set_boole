@@ -13,8 +13,8 @@ fn powerset(set: &[i32]) -> Vec<Vec<i32>> {
     res
 }
 
-fn main() {
-    let set = vec![1, 2, 3, 7, 9];
-    let powerset = powerset(&set);
-    println!("{:?}", powerset);
-}
+// fn main() {
+//     let set = vec![1, 2, 3, 7, 9];
+//     let powerset = powerset(&set);
+//     println!("{:?}", powerset);
+// }

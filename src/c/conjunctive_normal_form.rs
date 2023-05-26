@@ -260,12 +260,12 @@ fn conjunctive_normal_form(formula: &str) -> String {
     return res.chars().rev().collect::<String>();
 }
 
-fn main() {
-    println!("{}", conjunctive_normal_form("AB&!")); // A!B!|
-    println!("{}", conjunctive_normal_form("AB|!")); // A!B!&
-    println!("{}", conjunctive_normal_form("AB|C&")); // AB|C&
-    println!("{}", conjunctive_normal_form("AB|C|D|")); // ABCD|||
-    println!("{}", conjunctive_normal_form("AB&C&D&")); // ABCD&&&
-    println!("{}", conjunctive_normal_form("AB&!C!|")); // A!B!C!||
-    println!("{}", conjunctive_normal_form("AB|!C!&")); // A!B!C!&&
-}
+// fn main() {
+//     println!("{}", conjunctive_normal_form("AB&!")); // A!B!|
+//     println!("{}", conjunctive_normal_form("AB|!")); // A!B!&
+//     println!("{}", conjunctive_normal_form("AB|C&")); // AB|C&
+//     println!("{}", conjunctive_normal_form("AB|C|D|")); // ABCD|||
+//     println!("{}", conjunctive_normal_form("AB&C&D&")); // ABCD&&&
+//     println!("{}", conjunctive_normal_form("AB&!C!|")); // A!B!C!||
+//     println!("{}", conjunctive_normal_form("AB|!C!&")); // A!B!C!&&
+// }
