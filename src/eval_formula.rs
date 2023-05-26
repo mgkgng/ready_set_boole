@@ -29,7 +29,7 @@ pub fn eval_formula(formula: &str) -> bool {
                 stack.push(!val);
             },
             '0' | '1' => {
-                stack.push(c.to_string().parse::<u32>().expect("COUCOUCOU"));
+                stack.push(c.to_string().parse::<u32>().expect("Invalid syntax"));
             },
             _ => unreachable!()
         }
