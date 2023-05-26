@@ -23,3 +23,10 @@ Some: Some(T) is a variant of the Option enum that represents the presence of a 
 None: None is the other varaint of the Option enum that represents the absence of a value. It indicates that there is no value to associate with an operation or result. 'None' is often used to handle cases where a value maybe missing or when a computation fails to produce a valid result.
 
 Option is used to avoid null pointer exceptions or undefined behavior that can occur when dealing with null values directly.
+
+--------------------------------------------------------------------
+
+Clone?
+In Rust, clone() is a method provided by the 'Clone' trait, which allows creating a deep copy of an object. It is frequently used because Rust's ownership and borrowing system ensures that each value has a single owner at any given time. However, sometimes you need to create a new independent copy of a value, and that's where 'clone()' comes into play.
+
+In other words, it creates a new instance of an object with the same values as the original, effectively duplicating the data. It performs a 'deep copy' by recursively cloning all nested data strctures, ensuring that the new object is completely independent of the original.
