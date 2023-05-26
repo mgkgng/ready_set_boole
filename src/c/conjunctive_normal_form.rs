@@ -5,46 +5,10 @@ pub struct BinaryNode {
     right: Option<Box<Node>>
 }
 
-impl BinaryNode {
-    pub fn value(&self) -> &String {
-        &self.value
-    }
-
-    pub fn set_value(&mut self, value: String) {
-        self.value = value;
-    }
-
-    pub fn left(&self) -> &Option<Box<Node>> {
-        &self.left
-    }
-
-    pub fn set_left(&mut self, left: Option<Box<Node>>) {
-        self.left = left;
-    }
-
-    pub fn right(&self) -> &Option<Box<Node>> {
-        &self.right
-    }
-
-    pub fn set_right(&mut self, right: Option<Box<Node>>) {
-        self.right = right;
-    }
-}
-
 #[derive(Clone)]
 pub struct UnaryNode {
     value: String,
     child: Option<Box<Node>>
-}
-
-impl UnaryNode {
-    pub fn value(&self) -> &String {
-        &self.value
-    }
-
-    pub fn child(&self) -> &Option<Box<Node>> {
-        &self.child
-    }
 }
 
 #[derive(Clone)]
@@ -59,7 +23,56 @@ pub enum Node {
     Leaf(LeafNode)
 }
 
-pub fn str_to_ast(formula: &str) -> Node {
+fn get_not_node(node: &Node) -> Node {
+    return Node::Unary(UnaryNode {
+        value: "!".to_string(),
+        child: Some(Box::new(node.clone()))
+    });
+}
+
+fn get_and_node(lhs: &Node, rhs: &Node) -> Node {
+    return Node::Binary(BinaryNode {
+        value: "&".to_string(),
+        left: Some(Box::new(lhs.clone())),
+        right: Some(Box::new(rhs.clone()))
+    });
+}
+
+fn get_or_node(lhs: &Node, rhs: &Node) -> Node {
+    return Node::Binary(BinaryNode {
+        value: "|".to_string(),
+        left: Some(Box::new(lhs.clone())),
+        right: Some(Box::new(rhs.clone()))
+    });
+}
+
+fn get_conjunctive_distribution(node: &Node) -> Node {
+    match node {
+        Node::Binary(binary) if binary.value == "|" => {
+            let left = binary.left.clone().expect("Invalid syntax");
+            let right = binary.right.clone().expect("Invalid syntax");
+
+            match (&*left, &*right) {
+                (Node::Binary(binary_left), _) if binary_left.value == "&" =>
+                    Node::Binary(BinaryNode {
+                        value: "&".to_string(),
+                        left: Some(Box::new(get_conjunctive_distribution(&get_or_node(&binary_left.left.as_ref().unwrap(), &right)))),
+                        right: Some(Box::new(get_conjunctive_distribution(&get_or_node(&binary_left.right.as_ref().unwrap(), &right))))
+                    }),
+                (_, Node::Binary(binary_right)) if binary_right.value == "&" =>
+                    Node::Binary(BinaryNode {
+                        value: "&".to_string(),
+                        left: Some(Box::new(get_conjunctive_distribution(&get_or_node(&left, &binary_right.left.as_ref().unwrap())))),
+                        right: Some(Box::new(get_conjunctive_distribution(&get_or_node(&left, &binary_right.right.as_ref().unwrap()))))
+                    }),
+                _ => node.clone()
+            }
+        },
+        _ => node.clone()
+    }
+}
+
+fn str_to_ast(formula: &str) -> Node {
     let mut stack = Vec::new();
 
     for c in formula.chars() {
@@ -115,7 +128,7 @@ pub fn str_to_ast(formula: &str) -> Node {
     return root;
 }
 
-pub fn apply_nnf(curr: Node) -> Node {
+fn apply_nnf(curr: Node) -> Node {
     match curr {
         Node::Leaf(leaf) => {
             Node::Leaf(leaf)
@@ -125,8 +138,6 @@ pub fn apply_nnf(curr: Node) -> Node {
             let right = binary.right.expect("Invalid syntax");
             let left_nnf = apply_nnf(*left);
             let right_nnf = apply_nnf(*right);
-            // let left = binary.left.map(|box_node| apply_nnf(*box_node));
-            // let right = binary.right.map(|box_node| apply_nnf(*box_node));
             Node::Binary(BinaryNode {
                 value: binary.value,
                 left: Some(Box::new(left_nnf)),
@@ -169,84 +180,15 @@ pub fn apply_nnf(curr: Node) -> Node {
     }
 }
 
-pub fn ast_to_str(curr: Node) -> String {
-    let mut res: String = "".to_string();
-    match curr {
-        Node::Leaf(leaf) => {
-            res += &leaf.value;
-        },
-        Node::Binary(binary) => {
-            res += &binary.value;
-            res += &ast_to_str(*binary.right.expect("Invalid syntax"));
-            res += &ast_to_str(*binary.left.expect("Invalid syntax"));
-        },
-        Node::Unary(unary) => {
-            res += &unary.value;
-            res += &ast_to_str(*unary.child.expect("Invalid syntax"));
-        }
-    }
-    return res;
-}
-
-
-pub fn get_not_node(node: &Node) -> Node {
-    return Node::Unary(UnaryNode {
-        value: "!".to_string(),
-        child: Some(Box::new(node.clone()))
-    });
-}
-
-pub fn get_and_node(lhs: &Node, rhs: &Node) -> Node {
-    return Node::Binary(BinaryNode {
-        value: "&".to_string(),
-        left: Some(Box::new(lhs.clone())),
-        right: Some(Box::new(rhs.clone()))
-    });
-}
-
-pub fn get_or_node(lhs: &Node, rhs: &Node) -> Node {
-    return Node::Binary(BinaryNode {
-        value: "|".to_string(),
-        left: Some(Box::new(lhs.clone())),
-        right: Some(Box::new(rhs.clone()))
-    });
-}
-
-fn get_conjunctive_distribution(node: &Node) -> Node {
-    match node {
-        Node::Binary(binary) if binary.value() == "|" => {
-            let left = binary.left().clone().expect("Invalid syntax");
-            let right = binary.right().clone().expect("Invalid syntax");
-
-            match (&*left, &*right) {
-                (Node::Binary(binary_left), _) if binary_left.value() == "&" =>
-                    Node::Binary(BinaryNode {
-                        value: "&".to_string(),
-                        left: Some(Box::new(get_conjunctive_distribution(&get_or_node(&binary_left.left().as_ref().unwrap(), &right)))),
-                        right: Some(Box::new(get_conjunctive_distribution(&get_or_node(&binary_left.right().as_ref().unwrap(), &right))))
-                    }),
-                (_, Node::Binary(binary_right)) if binary_right.value() == "&" =>
-                    Node::Binary(BinaryNode {
-                        value: "&".to_string(),
-                        left: Some(Box::new(get_conjunctive_distribution(&get_or_node(&left, &binary_right.left().as_ref().unwrap())))),
-                        right: Some(Box::new(get_conjunctive_distribution(&get_or_node(&left, &binary_right.right().as_ref().unwrap()))))
-                    }),
-                _ => node.clone()
-            }
-        },
-        _ => node.clone()
-    }
-}
-
 fn apply_cnf(curr: Node) -> Node {
     match curr {
         Node::Binary(binary) => {
-            let left = binary.left().clone().expect("Invalid syntax");
-            let right = binary.right().clone().expect("Invalid syntax");
+            let left = binary.left.clone().expect("Invalid syntax");
+            let right = binary.right.clone().expect("Invalid syntax");
             let left_cnf = apply_cnf(*left);
             let right_cnf = apply_cnf(*right);
 
-            if binary.value() == "|" {
+            if binary.value == "|" {
                 return get_conjunctive_distribution(&Node::Binary(BinaryNode {
                     value: "|".to_string(),
                     left: Some(Box::new(left_cnf)),
@@ -254,22 +196,60 @@ fn apply_cnf(curr: Node) -> Node {
                 }));
             } else {
                 Node::Binary(BinaryNode {
-                    value: binary.value().to_string(),
+                    value: binary.value.to_string(),
                     left: Some(Box::new(left_cnf)),
                     right: Some(Box::new(right_cnf))
                 })
             }
         },
         Node::Unary(unary) => {
-            let child = unary.child().clone().expect("Invalid syntax");
+            let child = unary.child.clone().expect("Invalid syntax");
             let child_cnf = apply_cnf(*child);
             Node::Unary(UnaryNode {
-                value: unary.value().to_string(),
+                value: unary.value.to_string(),
                 child: Some(Box::new(child_cnf))
             })
         },
         _ => curr
     }
+}
+
+fn ast_to_str(curr: Node) -> String {
+    let mut res: String = "".to_string();
+    match curr {
+        Node::Leaf(leaf) => {
+            res += &leaf.value;
+        },
+        Node::Binary(binary) => {
+            let op = binary.value.chars().nth(0);
+            res += &binary.value;
+            let left_str = &ast_to_str(*binary.right.expect("Invalid syntax"));
+            let mut left_done = false;
+            let right_str = &ast_to_str(*binary.left.expect("Invalid syntax"));
+            let mut right_done = false;
+            if op == right_str.chars().nth(0) {
+                res += right_str;
+                right_done = true;
+            }
+            if op == left_str.chars().nth(0) {
+                let (binary, body) = left_str.split_at(1);
+                let new_res = binary.to_string() + &res + &body.to_string(); 
+                res = new_res;
+                left_done = true;
+            }
+            if !left_done {
+                res += &left_str;
+            }
+            if !right_done {
+                res += &right_str;
+            }
+        },
+        Node::Unary(unary) => {
+            res += &unary.value;
+            res += &ast_to_str(*unary.child.expect("Invalid syntax"));
+        }
+    }
+    return res;
 }
 
 fn conjunctive_normal_form(formula: &str) -> String {

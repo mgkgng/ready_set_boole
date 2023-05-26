@@ -22,11 +22,11 @@ fn reverse_map(n: f64) -> (u16, u16) {
     (x, y)
 }
 
-fn main() {
-    let value: f64 = 0.5; // value to be mapped
+// fn main() {
+//     let value: f64 = 0.5; // value to be mapped
 
-    let (x, y) = reverse_map(value);
-    println!("Coordinates for value {}: ({}, {})", value, x, y);
-    let n = map(x, y);
-    println!("Value for coordinates ({}, {}): {}", x, y, n);
-}
+//     let (x, y) = reverse_map(value);
+//     println!("Coordinates for value {}: ({}, {})", value, x, y);
+//     let n = map(x, y);
+//     println!("Value for coordinates ({}, {}): {}", x, y, n);
+// }
