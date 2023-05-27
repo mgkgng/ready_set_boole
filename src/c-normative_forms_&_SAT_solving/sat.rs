@@ -68,7 +68,7 @@ fn sat(formula: &str) -> bool {
     for i in 0..n_iter {
         let mut new_form = formula.to_string();
         for (j, var) in vars.iter().enumerate() {
-            let val = ((i / 2_u32.pow(vars_len - 1 - (j as u32))) % 2).to_string();
+            let val = ((i >> (vars_len as usize - j - 1)) & 1).to_string();
             new_form = new_form.replace(&var.to_string(), &val);
         }
         if eval_formula(&new_form) == true {
